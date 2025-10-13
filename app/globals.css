@@ -64,6 +64,10 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+
+  button {
+    cursor: pointer;
+  }
 }
 
 @utility background-light850_dark100 {
@@ -570,6 +574,7 @@ code {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
 /*
   ---break---
 */

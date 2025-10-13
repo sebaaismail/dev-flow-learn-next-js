@@ -4,7 +4,7 @@ import React from "react";
 
 import "./globals.css";
 import ThemeProvider from "@/context/Theme";
-import Navbar from "@/components/navigation/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = localFont({
   src: "./fonts/InterVF.ttf",
@@ -43,9 +43,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
         </ThemeProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );
