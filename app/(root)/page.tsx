@@ -1,7 +1,22 @@
-export default function Home() {
+import { auth, signOut } from "@/auth";
+import LogoutButton from "@/components/LogoutButton";
+import { Button } from "@/components/ui/button";
+import ROUTES from "@/constants/routes";
+
+const Home = async () => {
+  const session = await auth();
+
+  console.log(session);
+
   return (
-    <div className="card">
-      <h1 className="h1-bold">Tailwind CSS is FUN!!</h1>
+    <div className="px-10 pt-[100px]">
+      <h1 className="h1-bold mb-6">
+        {session?.user?.name} Welcome to the world of Next.js
+      </h1>
+
+      {session ? <LogoutButton /> : <p>No session detected</p>}
     </div>
   );
-}
+};
+
+export default Home;
