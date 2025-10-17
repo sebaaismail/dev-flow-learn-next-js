@@ -30,6 +30,7 @@ const SocialAuthForm = () => {
       if (result?.error) {
         toast.error("Sign-in failed", { description: result.error });
       } else if (result?.url) {
+        sessionStorage.setItem("login_success", "true");
         window.location.href = result.url;
       }
     } catch (error) {

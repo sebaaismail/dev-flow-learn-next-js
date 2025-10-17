@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth";
+import LoginToast from "@/components/LoginToast";
 import LogoutButton from "@/components/LogoutButton";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -15,6 +16,7 @@ const Home = async () => {
       </h1>
 
       {session ? <LogoutButton /> : <p>No session detected</p>}
+      <LoginToast />
     </div>
   );
 };
