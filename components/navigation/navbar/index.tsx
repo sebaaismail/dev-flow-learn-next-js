@@ -1,10 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Theme from "./Theme";
 import MobileNavigation from "./MobileNavigation";
+import { useAuth } from "@clerk/nextjs";
+import Avatar from "@/components/Avatar";
+import { useSession } from "next-auth/react";
+import { Session } from "node:inspector/promises";
 
 const Navbar = () => {
+  //const { userId, isSignedIn } = useAuth();
+  const { data: session } = useSession();
+
   return (
     <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link href="/" className="flex items-center gap-1">
@@ -25,6 +34,7 @@ const Navbar = () => {
       <div className="flex-between gap-5">
         <MobileNavigation />
         <Theme />
+        {session ? <Avatar imageUrl={session.user?.image} /> : ""}
       </div>
     </nav>
   );

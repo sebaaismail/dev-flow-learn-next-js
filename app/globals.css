@@ -68,6 +68,11 @@
   button {
     cursor: pointer;
   }
+
+  a,
+  [role="link"] {
+    @apply cursor-pointer;
+  }
 }
 
 @utility background-light850_dark100 {
