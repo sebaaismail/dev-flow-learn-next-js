@@ -32,9 +32,9 @@ const Navbar = () => {
       <p>Global Search</p>
 
       <div className="flex-between gap-5">
-        <MobileNavigation />
         <Theme />
         {session ? <Avatar imageUrl={session.user?.image} /> : ""}
+        <MobileNavigation />
       </div>
     </nav>
   );
