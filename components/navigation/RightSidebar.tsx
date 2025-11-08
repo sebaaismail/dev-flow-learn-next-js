@@ -8,11 +8,7 @@ import { set } from "zod";
 import TagCard from "../cards/TagCard";
 
 const RightSidebar = () => {
-  const [questions, setQuestions] = useState([]);
-  const [tags, setTags] = useState([]);
-
-  useEffect(() => {
-    setQuestions([
+  const [questions, setQuestions] = useState( [
       {
         _id: 1,
         text: "Would it be appropriate to point out an error in another paper during a referee report?",
@@ -31,7 +27,8 @@ const RightSidebar = () => {
         text: "What is an example of 3 numbers that do not make up a vector?",
       },
     ]);
-    setTags([
+
+  const [tags, setTags] = useState([
       {
         _id: 1,
         name: "javascript",
@@ -51,12 +48,11 @@ const RightSidebar = () => {
       },
       { _id: 5, name: "react.js", icon:"react", questions: 5400 },
     ]);
-  }, []);
 
   return (
     <section
-      className="hidden lg:flex flex-col background-light900_dark200 right-0 top-0 gap-10 sticky min-h-screen lg:w-[340px]
-    border-l gap-16 p-6 pt-40 shadow-light-300 dark:shadow-none"
+      className="flex flex-col background-light900_dark200 right-0 top-0 gap-10 sticky min-h-screen w-[340px]
+    border-l gap-16 p-6 pt-40 shadow-light-300 dark:shadow-none max-md:hidden"
     >
       {/* section Hot Network */}
       <div
