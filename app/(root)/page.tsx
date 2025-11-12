@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LoginToast from "@/components/LoginToast";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ interface SearchParams {
 const Home = async ({ searchParams }: SearchParams) => {
   const session = await auth();
 
-  const { query = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
 
   // const data = await axios.get("/api/questions", {
   //   query: {
@@ -48,9 +49,16 @@ const Home = async ({ searchParams }: SearchParams) => {
   //   },
   // });
 
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+
+    const matchesFilter = filter
+      ? question.tags.includes(filter.toLowerCase())
+      : true;
+    return matchesQuery && matchesFilter;
+  });
 
   return (
     <>
@@ -71,7 +79,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           otherClasses="flex-1"
         />
       </section>
-      HomeFilter
+      <HomeFilter />
       <div className="flex flex-col gap-6 w-full mt-10">
         {filteredQuestions.map((question) => (
           <h1 key={question._id}>{question.title}</h1>
