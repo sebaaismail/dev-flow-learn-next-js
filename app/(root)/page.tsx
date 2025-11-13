@@ -6,7 +6,6 @@ import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import Link from "next/link";
-import { de, ta, vi } from "zod/locales";
 
 const questions = [
   {
@@ -21,7 +20,7 @@ const questions = [
         typeIcon: "plain",
         questions: 12200,
       },
-      { _id: 2, name: "react.js", icon: "react", questions: 5400 },
+      { _id: 2, name: "react", icon: "react", questions: 5400 },
     ],
     author: {
       _id: "1",
