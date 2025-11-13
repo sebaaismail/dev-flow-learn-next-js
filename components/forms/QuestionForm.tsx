@@ -1,7 +1,7 @@
 "use client";
 
 import { askAQuestionSchema } from "@/lib/validations";
-import React from "react";
+import React, { useRef } from "react";
 import { Path, useForm } from "react-hook-form";
 import * as z from "zod";
 import {
@@ -16,13 +16,16 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { MDXEditorMethods } from "@mdxeditor/editor";
+import dynamic from "next/dynamic";
 
 const QuestionForm = () => {
-  // do like we did before in:
-  //  useForm<z.infer<typeof schema>>({
-  //     resolver: zodResolver(schema),
-  //     defaultValues: defaultValues as DefaultValues<T>,
-  //   });
+  const editorRef = useRef<MDXEditorMethods>(null);
+  const Editor = dynamic(() => import("@/components/editor"), {
+    // Make sure we turn SSR off
+    ssr: false,
+  });
+
   const form = useForm<z.infer<typeof askAQuestionSchema>>({
     resolver: zodResolver(askAQuestionSchema),
     defaultValues: {
@@ -72,7 +75,14 @@ const QuestionForm = () => {
                 Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
-              <FormControl>Editor</FormControl>
+              <FormControl>
+                <Editor
+                  editorRef={editorRef}
+                  markdown={field.value}
+                  fieldChange={field.onChange}
+                  value={field.value}
+                />
+              </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Introduce the problem and expand on what you&apos;ve put in the
                 title.
