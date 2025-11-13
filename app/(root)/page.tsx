@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LoginToast from "@/components/LoginToast";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -13,24 +14,50 @@ const questions = [
     title: "How to learn React?",
     description:
       "I am new to web development and want to learn React. Any suggestions?",
-    tags: ["react", "javascript"],
-    author: { _id: "1", name: "John Doe" },
+    tags: [
+      {
+        _id: 1,
+        name: "javascript",
+        typeIcon: "plain",
+        questions: 12200,
+      },
+      { _id: 2, name: "react.js", icon: "react", questions: 5400 },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg",
+    },
     upvotes: 10,
     answers: 2,
     views: 150,
-    createdAt: new Date("2024-01-01"),
+    createdAt: new Date("2025-11-01"),
   },
   {
     _id: "2",
     title: "How to learn JavaScript?",
     description:
       "I am new to programming and want to learn JavaScript. Any suggestions?",
-    tags: ["javascript", "programming"],
+    tags: [
+      {
+        _id: 1,
+        name: "javascript",
+        typeIcon: "plain",
+        questions: 12200,
+      },
+      {
+        _id: 2,
+        name: "programming",
+        typeIcon: "plain",
+        questions: 4400,
+      },
+    ],
     author: { _id: "2", name: "Jane Smith" },
     upvotes: 5,
     answers: 1,
     views: 100,
-    createdAt: new Date("2024-02-01"),
+    createdAt: new Date("2025-11-13"),
   },
 ];
 
@@ -54,8 +81,14 @@ const Home = async ({ searchParams }: SearchParams) => {
       .toLowerCase()
       .includes(query.toLowerCase());
 
-    const matchesFilter = filter
-      ? question.tags.includes(filter.toLowerCase())
+    const filterValue = String(filter || "")
+      .trim()
+      .toLowerCase();
+
+    const matchesFilter = filterValue
+      ? question.tags
+          .map((t) => (t && t.name ? String(t.name).toLowerCase() : ""))
+          .includes(filterValue)
       : true;
     return matchesQuery && matchesFilter;
   });
@@ -82,7 +115,7 @@ const Home = async ({ searchParams }: SearchParams) => {
       <HomeFilter />
       <div className="flex flex-col gap-6 w-full mt-10">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
