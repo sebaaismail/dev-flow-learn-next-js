@@ -1,0 +1,44 @@
+/* === Make editor toolbar wrap on small screens === */
+/* Allow toolbar to wrap into multiple rows */
+._toolbarRoot_1e2ox_162 {
+  flex-wrap: wrap !important;
+  overflow-x: visible !important; /* stop horizontal scroll */
+  align-items: center;
+  gap: 0.35rem; /* slightly smaller gap on mobile */
+  padding: 0.375rem !important; /* optional smaller padding */
+}
+
+/* Ensure groups can wrap instead of forcing nowrap */
+._toolbarGroupOfGroups_1e2ox_219,
+._toolbarToggleSingleGroup_1e2ox_224,
+._toolbarToggleSingleGroup_1e2ox_224 > * {
+  white-space: normal !important;
+  flex-wrap: wrap !important;
+}
+
+/* Allow the mode switch to appear on its own row
+     (remove auto margin that pins it to the far right) */
+._toolbarModeSwitch_1e2ox_198 {
+  margin-left: 0 !important;
+  width: 100%;
+  justify-content: flex-end; /* keep its internal layout aligned right */
+  margin-top: 0.25rem;
+}
+
+/* Reduce button sizes slightly so more buttons fit per row */
+._toolbarButton_1e2ox_239,
+._toolbarToggleItem_1e2ox_208,
+._actionButton_1e2ox_695 {
+  padding: 0.25rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* If there are wide select triggers, let them shrink/wrap */
+._selectTrigger_1e2ox_308,
+._toolbarButtonSelectTrigger_1e2ox_307,
+._toolbarNodeKindSelectTrigger_1e2ox_306 {
+  width: auto !important;
+  min-width: 3.25rem;
+  max-width: 40% !important;
+  white-space: normal !important;
+}

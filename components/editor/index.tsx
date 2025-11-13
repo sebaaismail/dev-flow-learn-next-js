@@ -37,6 +37,7 @@ import { useTheme } from "next-themes";
 
 import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
+import "./fix.css";
 
 interface Props {
   editorRef: ForwardedRef<MDXEditorMethods> | null;

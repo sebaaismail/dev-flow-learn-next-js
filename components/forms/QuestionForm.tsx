@@ -18,6 +18,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
+import TagCard from "../cards/TagCard";
 
 const QuestionForm = () => {
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -35,7 +36,36 @@ const QuestionForm = () => {
     },
   });
 
-  const handleCreateQuestion = () => {};
+  const handleCreateQuestion = (data: z.infer<typeof askAQuestionSchema>) => {
+    console.log("Question Data:", data);
+  };
+
+  const handleRemoveTag = (tag: string, field: { value: string[] }) => {
+    const updatedTags = field.value.filter((t) => t !== tag);
+    form.setValue("tags", updatedTags);
+  };
+
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: { value: string[]; onChange: (tags: string[]) => void }
+  ) => {
+    if (e.key === "Enter" && field.value.length < 3) {
+      e.preventDefault();
+      const tagInput = e.currentTarget.value.trim();
+
+      if (
+        tagInput &&
+        !field.value.includes(tagInput) &&
+        tagInput.length <= 15
+      ) {
+        form.setValue("tags", [...field.value, tagInput]);
+        e.currentTarget.value = "";
+        form.clearErrors("tags");
+      } else if (field.value.includes(tagInput)) {
+        form.setError("tags", { message: "Tag already existed." });
+      }
+    }
+  };
 
   return (
     <Form {...form}>
@@ -105,9 +135,23 @@ const QuestionForm = () => {
                   <Input
                     className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-12 border"
                     placeholder="Add tags..."
-                    {...field}
+                    onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
-                  Tags
+                  {field.value.length > 0 && (
+                    <div className="flex-start mt-2.5 flex flex-wrap gap-2.5">
+                      {field?.value?.map((tag: string) => (
+                        <TagCard
+                          key={tag}
+                          name={tag}
+                          _id={tag}
+                          compact
+                          remove
+                          isButton
+                          handleRemove={() => handleRemoveTag(tag, field)}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
