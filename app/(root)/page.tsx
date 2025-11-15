@@ -5,7 +5,11 @@ import LoginToast from "@/components/LoginToast";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import handleError from "@/lib/handlers/error";
+import { NotFoundError, ValidationError } from "@/lib/http-errors";
+import dbConnect from "@/lib/mongoose";
 import Link from "next/link";
+import { title } from "process";
 
 const questions = [
   {
@@ -60,12 +64,23 @@ const questions = [
   },
 ];
 
+const test = async () => {
+  try {
+    throw new Error("Test error for logging");
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
   const session = await auth();
+
+  const result = await test();
+  console.log("Error handling result:", result);
 
   const { query = "", filter = "" } = await searchParams;
 
