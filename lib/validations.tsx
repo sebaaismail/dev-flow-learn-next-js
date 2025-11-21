@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const signInSchema = z.object({
+export const SignInSchema = z.object({
   email: z
     .email("Please provide a valid email adress.")
     .min(1, "Email is required"),
@@ -11,7 +11,7 @@ export const signInSchema = z.object({
     .max(100, "Password cannot exceed 100 characters."),
 });
 
-export const signUpSchema = z.object({
+export const SignUpSchema = z.object({
   email: z
     .email("Please provide a valid email address.")
     .min(1, "Email is required"),
@@ -47,7 +47,7 @@ export const signUpSchema = z.object({
     ),
 });
 
-export const askAQuestionSchema = z.object({
+export const AskAQuestionSchema = z.object({
   title: z
     .string()
     .min(5, "Title is required.")
@@ -63,4 +63,19 @@ export const askAQuestionSchema = z.object({
     )
     .min(1, "At least one tag is required.")
     .max(5, "Cannot have more than 5 tags."),
+});
+
+export const UserSchema = z.object({
+  name: z.string("Name is required").min(1, { error: "Name is required" }),
+  username: z
+    .string("UserName is required")
+    .min(3, { error: "Username must be at least 3 characters long" }),
+  email: z
+    .string("Email is required")
+    .email({ message: "Please provide a valid email address" }),
+  bio: z.string().optional(),
+  image: z.string().url({ error: "Please provide a valid URL" }).optional(),
+  location: z.string().optional(),
+  portfolio: z.string().url({ error: "Please provide a valid URL" }).optional(),
+  reputation: z.number().optional(),
 });

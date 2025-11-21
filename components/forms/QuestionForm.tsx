@@ -1,6 +1,6 @@
 "use client";
 
-import { askAQuestionSchema } from "@/lib/validations";
+import { AskAQuestionSchema } from "@/lib/validations";
 import React, { useRef } from "react";
 import { Path, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -27,8 +27,8 @@ const QuestionForm = () => {
     ssr: false,
   });
 
-  const form = useForm<z.infer<typeof askAQuestionSchema>>({
-    resolver: zodResolver(askAQuestionSchema),
+  const form = useForm<z.infer<typeof AskAQuestionSchema>>({
+    resolver: zodResolver(AskAQuestionSchema),
     defaultValues: {
       title: "",
       content: "",
@@ -36,7 +36,7 @@ const QuestionForm = () => {
     },
   });
 
-  const handleCreateQuestion = (data: z.infer<typeof askAQuestionSchema>) => {
+  const handleCreateQuestion = (data: z.infer<typeof AskAQuestionSchema>) => {
     console.log("Question Data:", data);
   };
 

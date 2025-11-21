@@ -29,7 +29,7 @@ export class ValidationError extends RequestError {
         if (messages[0] === "Required") {
           return `${fieldName} is required.`;
         } else {
-          return messages.join(" and");
+          return messages.join(" and ");
         }
       }
     );

@@ -1,4 +1,3 @@
-import { error } from "console";
 import { NextResponse } from "next/server";
 import { RequestError, ValidationError } from "../http-errors";
 import { ZodError } from "zod";
