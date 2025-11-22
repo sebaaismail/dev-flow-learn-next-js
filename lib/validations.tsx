@@ -79,3 +79,74 @@ export const UserSchema = z.object({
   portfolio: z.string().url({ error: "Please provide a valid URL" }).optional(),
   reputation: z.number().optional(),
 });
+
+// do same logic for Account model
+// AccountSchema
+/*
+import { model, models, Schema, Types } from "mongoose";
+
+export interface IAccount {
+  userId: Types.ObjectId;
+  name: string;
+  image?: string;
+  password?: string;
+  provider: string;
+  providerAccountId: string;
+}
+
+const AccountSchema = new Schema<IAccount>(
+  {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name: { type: String, required: true },
+    image: { type: String },
+    password: { type: String },
+    provider: { type: String, required: true },
+    providerAccountId: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
+const Account = models?.Account || model<IAccount>("Account", AccountSchema);
+
+export default Account;
+
+*/
+// dont forget inside string("....")
+
+export const AccountSchema = z.object({
+  userId: z.string("User ID is required"),
+  name: z.string("Name is required").min(1, { error: "Name is required" }),
+  image: z.url({ error: "Please provide a valid URL" }).optional(),
+  /*
+  for password do extra validation like in:
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long.")
+    .max(100, "Password cannot exceed 100 characters.")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+    .regex(/[0-9]/, "Password must contain at least one number.")
+    .regex(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least one special character."
+    ),
+  */
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters long.")
+    .max(100, "Password cannot exceed 100 characters.")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+    .regex(/[0-9]/, "Password must contain at least one number.")
+    .regex(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least one special character."
+    )
+    .optional(),
+  provider: z
+    .string("Provider is required")
+    .min(1, { error: "Provider is required" }),
+  providerAccountId: z
+    .string("Provider Account ID is required")
+    .min(1, { error: "Provider Account ID is required" }),
+});
