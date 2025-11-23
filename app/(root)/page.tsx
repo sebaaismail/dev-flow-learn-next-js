@@ -1,15 +1,12 @@
 import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
-import LoginToast from "@/components/LoginToast";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import { api } from "@/lib/api";
 import handleError from "@/lib/handlers/error";
-import { NotFoundError, ValidationError } from "@/lib/http-errors";
-import dbConnect from "@/lib/mongoose";
 import Link from "next/link";
-import { title } from "process";
 
 const questions = [
   {
@@ -66,7 +63,7 @@ const questions = [
 
 const test = async () => {
   try {
-    throw new Error("Test error for logging");
+    return await api.users.getALl();
   } catch (error) {
     return handleError(error);
   }
@@ -79,8 +76,8 @@ interface SearchParams {
 const Home = async ({ searchParams }: SearchParams) => {
   const session = await auth();
 
-  const result = await test();
-  console.log("Error handling result:", result);
+  const users = await test();
+  console.log(users);
 
   const { query = "", filter = "" } = await searchParams;
 
