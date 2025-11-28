@@ -15,8 +15,10 @@ export async function fetchHandler<T>(
   url: string,
   options: FetchOptions = {}
 ): Promise<ActionResponse<T>> {
+  const startedAt = Date.now();
+  logger.info(`fetchHandler - start request: ${url}`);
   const {
-    timeout = 5000,
+    timeout = 15000, // todo decrease to 5000 ms later in production
     headers: customHeaders = {},
     ...restOptions
   } = options;
@@ -48,14 +50,21 @@ export async function fetchHandler<T>(
       throw new RequestError(response.status, `HTTP error: ${response.status}`);
     }
 
+    const duration = Date.now() - startedAt;
+    logger.info(
+      `fetchHandler - success: ${url} (${duration}ms) [${response.status}]`
+    );
     return await response.json();
   } catch (err) {
     const error = isError(err) ? err : new Error("An unknown error occurred");
 
+    const duration = Date.now() - startedAt;
     if (error.name === "AbortError") {
-      logger.warn(`Request to ${url} timed out`);
+      logger.warn(`Request to ${url} timed out after ${duration}ms`);
     } else {
-      logger.error(`Fetch error for ${url}: ${error.message}`);
+      logger.error(
+        `Fetch error for ${url} after ${duration}ms: ${error.message}`
+      );
     }
 
     return handleError(error) as ActionResponse<T>;

@@ -5,10 +5,11 @@ import ROUTES from "@/constants/routes";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { auth, signOut } from "@/auth";
+import logger from "@/lib/logger";
 
 const LeftSidebar = async () => {
   const session = await auth();
-  const userId = session?.user?.email;
+  const userId = session?.user?.email ?? undefined;
 
   return (
     <section className="custom-scrollbar background-light900_dark200 sticky left-0 top-0 h-screen flex flex-col justify-between overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
@@ -21,7 +22,10 @@ const LeftSidebar = async () => {
           <form
             action={async () => {
               "use server";
-              await signOut();
+              logger.info("LeftSidebar signOut server action - start");
+              const response = await signOut({ redirectTo: ROUTES.SIGN_IN });
+              logger.info("LeftSidebar signOut server action - done");
+              return response;
             }}
           >
             <Button

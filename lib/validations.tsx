@@ -80,57 +80,11 @@ export const UserSchema = z.object({
   reputation: z.number().optional(),
 });
 
-// do same logic for Account model
-// AccountSchema
-/*
-import { model, models, Schema, Types } from "mongoose";
-
-export interface IAccount {
-  userId: Types.ObjectId;
-  name: string;
-  image?: string;
-  password?: string;
-  provider: string;
-  providerAccountId: string;
-}
-
-const AccountSchema = new Schema<IAccount>(
-  {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    name: { type: String, required: true },
-    image: { type: String },
-    password: { type: String },
-    provider: { type: String, required: true },
-    providerAccountId: { type: String, required: true },
-  },
-  { timestamps: true }
-);
-
-const Account = models?.Account || model<IAccount>("Account", AccountSchema);
-
-export default Account;
-
-*/
-// dont forget inside string("....")
-
 export const AccountSchema = z.object({
   userId: z.string("User ID is required"),
   name: z.string("Name is required").min(1, { error: "Name is required" }),
   image: z.url({ error: "Please provide a valid URL" }).optional(),
-  /*
-  for password do extra validation like in:
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters long.")
-    .max(100, "Password cannot exceed 100 characters.")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
-    .regex(/[0-9]/, "Password must contain at least one number.")
-    .regex(
-      /[^A-Za-z0-9]/,
-      "Password must contain at least one special character."
-    ),
-  */
+
   password: z
     .string()
     .min(6, "Password must be at least 6 characters long.")
@@ -149,4 +103,21 @@ export const AccountSchema = z.object({
   providerAccountId: z
     .string("Provider Account ID is required")
     .min(1, { error: "Provider Account ID is required" }),
+});
+
+export const SignInWithOAuthSchema = z.object({
+  provider: z.enum(["google", "github"]),
+  providerAccountId: z
+    .string("Provider Account ID is required")
+    .min(1, { error: "Provider Account ID is required" }),
+  user: z.object({
+    name: z.string("Name is required").min(1, { error: "Name is required" }),
+    username: z
+      .string("UserName is required")
+      .min(3, { error: "Username must be at least 3 characters long" }),
+    email: z
+      .string("Email is required")
+      .email({ message: "Please provide a valid email address" }),
+    image: z.string().url({ error: "Please provide a valid URL" }).optional(),
+  }),
 });

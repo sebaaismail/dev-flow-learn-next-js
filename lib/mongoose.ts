@@ -29,12 +29,15 @@ const dbConnect = async (): Promise<Mongoose> => {
   }
 
   if (!cached.promise) {
+    logger.info("dbConnect - starting new mongoose connection");
+    const start = Date.now();
     cached.promise = mongoose
       .connect(MONGODB_URI, {
         dbName: "devflow",
       })
       .then((result) => {
-        logger.info("MongoDB connected");
+        const duration = Date.now() - start;
+        logger.info(`MongoDB connected in ${duration}ms`);
         return result;
       })
       .catch((error) => {

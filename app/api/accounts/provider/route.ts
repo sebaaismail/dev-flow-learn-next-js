@@ -1,6 +1,7 @@
 import Account from "@/database/account.model";
 import handleError from "@/lib/handlers/error";
 import { ValidationError, NotFoundError } from "@/lib/http-errors";
+import dbConnect from "@/lib/mongoose";
 import { AccountSchema } from "@/lib/validations";
 import { APIErrorResponse } from "@/types/global";
 import { NextResponse } from "next/server";
