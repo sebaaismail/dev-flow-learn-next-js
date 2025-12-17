@@ -3,8 +3,8 @@ import Link from "next/link";
 import React from "react";
 import Theme from "./Theme";
 import MobileNavigation from "./MobileNavigation";
-import Avatar from "@/components/Avatar";
 import { auth } from "@/auth";
+import UserAvatar from "@/components/UserAvatar";
 
 const Navbar = async () => {
   const session = await auth();
@@ -28,7 +28,15 @@ const Navbar = async () => {
 
       <div className="flex-between gap-5">
         <Theme />
-        {session ? <Avatar imageUrl={session.user?.image} /> : ""}
+        {session ? (
+          <UserAvatar
+            id={session.user?.id!}
+            name={session.user?.name!}
+            imageUrl={session.user?.image}
+          />
+        ) : (
+          ""
+        )}
         <MobileNavigation />
       </div>
     </nav>
