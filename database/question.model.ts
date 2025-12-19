@@ -1,4 +1,4 @@
-import { model, models, Schema, Schema, Types } from "mongoose";
+import { model, models, Schema, Types } from "mongoose";
 
 export interface IQuestion {
   title: string;
@@ -10,6 +10,14 @@ export interface IQuestion {
   answers: number;
   author: Types.ObjectId;
 }
+
+// What is the difference between debounce and throttle in JavaScript?
+
+// details of the question related to that question:
+/*
+I want to understand the difference between debounce and throttle functions in JavaScript.
+When should I use one over the other? Can you provide examples of each?
+*/
 
 const QuestionSchema = new Schema<IQuestion>(
   {

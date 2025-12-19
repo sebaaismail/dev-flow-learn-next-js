@@ -40,3 +40,13 @@ type errorResponse = ActionResponse<null> & { success: false };
 
 type APIErrorResponse = NextResponse<errorResponse>;
 type APIResponse<T = null> = NextResponse<successResponse<T> | errorResponse>;
+
+interface routerParams {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+}
+
+// difference between params and searchParams
+// params: /question/[id] => { id: 'some-id' }
+// searchParams: /question/[id]?sort=asc => { sort: 'asc' }
+// params are part of the URL path, while searchParams are query parameters.

@@ -28,7 +28,6 @@ import {
   tablePlugin,
   imagePlugin,
   codeBlockPlugin,
-  defaultCodeBlockLanguage$,
   codeMirrorPlugin,
   diffSourcePlugin,
 } from "@mdxeditor/editor";
@@ -41,13 +40,13 @@ import "./fix.css";
 
 interface Props {
   editorRef: ForwardedRef<MDXEditorMethods> | null;
-  value: string;
+  value?: string;
   fieldChange: (value: string) => void;
 }
 
 const Editor = ({
   editorRef,
-  value,
+  value = "",
   fieldChange,
   ...props
 }: Props & MDXEditorProps) => {
@@ -57,7 +56,7 @@ const Editor = ({
   return (
     <MDXEditor
       className="background-light800_dark200 light-border-2 markdown-editor dark-editor w-full border"
-      onChange={fieldChange}
+      onChange={(value) => fieldChange(value || "")}
       ref={editorRef}
       key={resolvedTheme} // Force re-render on theme change
       plugins={[

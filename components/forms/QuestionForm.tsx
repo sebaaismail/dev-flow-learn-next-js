@@ -1,8 +1,8 @@
 "use client";
 
 import { AskAQuestionSchema } from "@/lib/validations";
-import React, { useRef } from "react";
-import { Path, useForm } from "react-hook-form";
+import React, { useRef, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import {
   Form,
@@ -19,8 +19,16 @@ import { Button } from "../ui/button";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
 import TagCard from "../cards/TagCard";
+import { createQuestion } from "@/lib/actions/question.action";
+
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import ROUTES from "@/constants/routes";
+import { LoaderIcon } from "lucide-react";
 
 const QuestionForm = () => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const editorRef = useRef<MDXEditorMethods>(null);
   const Editor = dynamic(() => import("@/components/editor"), {
     // Make sure we turn SSR off
@@ -36,8 +44,23 @@ const QuestionForm = () => {
     },
   });
 
-  const handleCreateQuestion = (data: z.infer<typeof AskAQuestionSchema>) => {
-    console.log("Question Data:", data);
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskAQuestionSchema>
+  ) => {
+    startTransition(async () => {
+      const content = editorRef.current?.getMarkdown() || data.content;
+      const result = await createQuestion({ ...data, content });
+      if (result.success) {
+        toast.success("Success", {
+          description: "Question created successfully.",
+        });
+        router.push(ROUTES.QUESTION(result.data!._id));
+      } else {
+        toast.error("Error", {
+          description: result.error?.message || "Failed to create question.",
+        });
+      }
+    });
   };
 
   const handleRemoveTag = (tag: string, field: { value: string[] }) => {
@@ -99,18 +122,23 @@ const QuestionForm = () => {
         <FormField
           control={form.control}
           name="content"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex flex-col w-full">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
-                <Editor
-                  editorRef={editorRef}
-                  markdown={field.value}
-                  fieldChange={field.onChange}
-                  value={field.value}
+                <Controller
+                  name="content"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Editor
+                      editorRef={editorRef}
+                      markdown={field.value}
+                      fieldChange={(value) => field.onChange(value)}
+                    />
+                  )}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -166,9 +194,17 @@ const QuestionForm = () => {
         <div className="flex justify-end w-full">
           <Button
             type="submit"
+            disabled={isPending}
             className="primary-gradient w-fit !text-light-900"
           >
-            Ask A Question
+            {isPending ? (
+              <>
+                <LoaderIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask A Question</>
+            )}
           </Button>
         </div>
       </form>
